@@ -1,5 +1,8 @@
 import openpyxl
 
+#heat map of locations - https://eatsleepdata.com/data-viz/how-to-generate-a-geographical-heatmap-with-python.html
+#bar graph
+
 def retrieve_speeding_data(file_name):
     data_2014 = {}
     data_2015 = {}
