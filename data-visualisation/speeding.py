@@ -33,7 +33,7 @@ def retrieve_postocde_data(file_name):
     metro_pcode = []
     
     
-    for row in range(19,615):
+    for row in range(1,4768):
         postcode = curr_sheet.cell(row = row, column = 1).value
         suburb = curr_sheet.cell(row = row, column = 2).value
         lat = curr_sheet.cell(row = row, column = 4).value
@@ -41,50 +41,77 @@ def retrieve_postocde_data(file_name):
         region = curr_sheet.cell(row = row, column = 6).value
 
         collated_data[suburb] = [postcode, lat, long, region]
+
         if region == "Metro" and postcode not in metro_pcode:
             metro_pcode.append(postcode)
         
     return collated_data,metro_pcode;
         
 
-def retrieve_highest_n(data,n):
+def retrieve_ranked_n(data,n,top = True):
     fine_rank = []
     pcode_map = {}
     top_n = []
     top_n_pcode = []
+    bottom_n = []
+    bottom_n_pcode = []
+    
     for entry in data:
         fine_value = data[entry][0][1] + data[entry][1][1]
         fine_rank.append(fine_value)
         pcode_map[entry] = fine_value
         
     fine_rank = sorted(fine_rank)
+
+    if top:
+        for i in range(len(fine_rank)-1, len(fine_rank) - n - 1, -1):
+            top_n.append(fine_rank[i])
+            for entry in pcode_map:
+                if pcode_map[entry] == fine_rank[i]:
+                    top_n_pcode.append(entry)
+        return top_n, top_n_pcode
     
-    for i in range(len(fine_rank)-1, len(fine_rank) - n - 1, -1):
-        top_n.append(fine_rank[i])
-        for entry in pcode_map:
-            if pcode_map[entry] == fine_rank[i]:
-                top_n_pcode.append(entry)
-                
-    return top_n, top_n_pcode
-
-def is_metro(pcode):
-    if pcode in region_data:
-        return True
     else:
-        return False
+        for i in range(n):
+            bottom_n.append(fine_rank[i])
+            for entry in pcode_map:
+                if pcode_map[entry] == fine_rank[i]:
+                    bottom_n_pcode.append(entry)
+        return bottom_n, bottom_n_pcode
+    
 
-def is_regional(pcode):
-    if is_metro(pcode) == False:
-        return True
-    else:
-        return False
+def text_results(data_2014, data_2015, n):
+    h_fine, h_pcode = retrieve_ranked_n(data_2014,n, top = True)
+    print("Top",n,"Postcodes for Speeding Fines 2014")
+    for p in range(len(h_pcode)):
+        if h_pcode[p] in metro_pcode:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Metro')
+        else:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
 
+    h_fine, h_pcode = retrieve_ranked_n(data_2015,n, top = True)
+    print("\nTop",n,"Postcodes for Speeding Fines 2015")
+    for p in range(len(h_pcode)):
+        if h_pcode[p] in metro_pcode:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Metro')
+        else:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
+
+    h_fine, h_pcode = retrieve_ranked_n(data_2014,n, top = False)
+    print("\nBottom",n,"Postcodes for Speeding Fines 2014")
+    for p in range(len(h_pcode)):
+        if h_pcode[p] in metro_pcode:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Metro')
+        else:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')   
+
+    h_fine, h_pcode = retrieve_ranked_n(data_2015,n, top = False)
+    print("\nBottom",n,"Postcodes for Speeding Fines 2015")
+    for p in range(len(h_pcode)):
+        if h_pcode[p] in metro_pcode:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Metro')
+        else:
+            print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
+    
 curr_sheet, data_2014, data_2015 = retrieve_speeding_data("./speeding_stats.xlsx")
 collated_data, metro_pcode = retrieve_postocde_data("./Australian_Post_Codes_Lat_Lon.xlsx")
-
-h_fine, h_pcode = retrieve_highest_n(data_2014,10)
-for p in range(len(h_pcode)):
-    if h_pcode[p] in metro_pcode:
-        print(str(p + 1) + '.', p, "$" + str(h_fine[p]) + ' - Metro')
-    else:
-        print(str(p + 1) + '.', p, "$" + str(h_fine[p]) + ' - Regional')
