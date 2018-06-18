@@ -1,6 +1,6 @@
 import openpyxl
+import gmplot
 
-#heat map of locations - https://eatsleepdata.com/data-viz/how-to-generate-a-geographical-heatmap-with-python.html
 #bar graph
 
 def retrieve_speeding_data(file_name):
@@ -82,6 +82,17 @@ def retrieve_ranked_n(data,n,top = True):
                     bottom_n_pcode.append(entry)
         return bottom_n, bottom_n_pcode
     
+def query_specific_pcode(data,pcode):
+    fine_rank = []
+    pcode_map = {}
+    
+    for entry in data:
+        fine_value = data[entry][0][1] + data[entry][1][1]
+        fine_rank.append(fine_value)
+        pcode_map[entry] = fine_value
+        
+    fine_rank = sorted(fine_rank)
+    return pcode_map[pcode], len(fine_rank) - fine_rank.index(pcode_map[pcode])
 
 def text_results(data_2014, data_2015, n):
     h_fine, h_pcode = retrieve_ranked_n(data_2014,n, top = True)
@@ -115,6 +126,26 @@ def text_results(data_2014, data_2015, n):
             print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Metro')
         else:
             print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
+
+def create_heat_map(speeding_data, postcode_data):
+    #tried implementing but doesn't work as intended
+    latitudes = []
+    longitudes = []
+    
+    for entry in postcode_data:
+        pcode = postcode_data[entry][0]
+        if pcode in speeding_data:
+            fine_total = speeding_data[pcode][0][0] + speeding_data[pcode][1][0]
+            mod_fine_total = fine_total % 100
+            for i in range(mod_fine_total):
+                latitudes.append(postcode_data[entry][1])
+                longitudes.append(postcode_data[entry][2])
+
+    gmap = gmplot.GoogleMapPlotter(-33.8688, 151.2093, 10)
+    gmap.heatmap(latitudes, longitudes)
+    gmap.draw("test.html")
     
 curr_sheet, data_2014, data_2015 = retrieve_speeding_data("./speeding_stats.xlsx")
 collated_data, metro_pcode = retrieve_postocde_data("./Australian_Post_Codes_Lat_Lon.xlsx")
+
+create_heat_map(data_2014, collated_data)
