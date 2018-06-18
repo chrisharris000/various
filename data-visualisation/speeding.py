@@ -1,6 +1,6 @@
 import openpyxl
-import gmplot
-
+import folium
+from colour import Color
 #bar graph
 
 def retrieve_speeding_data(file_name):
@@ -145,25 +145,37 @@ def text_results(data_2014, data_2015, n):
     gmap.heatmap(latitudes, longitudes)
     gmap.draw("test.html")'''
 
-def drop_pins(speeding_data, postcode_data):   
+def circle_ranked_n(speeding_data, postcode_data):   
     h_fine, h_pcode = retrieve_ranked_n(speeding_data,10,top = True)
     latitude = []
     longitude = []
+    red = Color("red")
+    orange = Color("Orange")
+    colors = list(red.range_to(orange,10))
+    map_osm = folium.Map(location=[-33.8688, 151.2093],zoom_start = 13)
     
-    gmap = gmplot.GoogleMapPlotter(-33.8688, 151.2093, 10)
-    
-    for entry in postcode_data:
-        for h_p in h_pcode:
+    for h_p in h_pcode:
+        avg_lat = 0
+        avg_lon = 0
+        total = 0
+        for entry in postcode_data:
             if postcode_data[entry][0] == h_p:
-                lat = postcode_data[entry][1]
-                lon = postcode_data[entry][2]
-                latitude.append(lat)
-                longitude.append(lon)
+                avg_lat += postcode_data[entry][1]
+                avg_lon += postcode_data[entry][2]
+                total += 1
+        msg = str(h_p) + " - Ranked " + str(h_pcode.index(h_p)+1) +" for Speeding Fines"
+        c = colors[h_pcode.index(h_p)]
+        folium.CircleMarker([avg_lat/total,avg_lon/total],
+                    radius=75,
+                    popup=msg,
+                    color=c.hex,
+                    fill_color=c.hex,
+                    fill = True
+                   ).add_to(map_osm)   
                 
-    gmap.scatter(latitude, longitude,color='#FF6666',marker=True)          
-    gmap.draw("test.html")
+    map_osm.save("test.html")
     
 curr_sheet, data_2014, data_2015 = retrieve_speeding_data("./speeding_stats.xlsx")
 collated_data, metro_pcode = retrieve_postocde_data("./Australian_Post_Codes_Lat_Lon.xlsx")
 
-drop_pins(data_2014, collated_data)
+circle_ranked_n(data_2014, collated_data)
