@@ -127,7 +127,7 @@ def text_results(data_2014, data_2015, n):
         else:
             print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
 
-def create_heat_map(speeding_data, postcode_data):
+'''def create_heat_map(speeding_data, postcode_data):
     #tried implementing but doesn't work as intended
     latitudes = []
     longitudes = []
@@ -143,9 +143,27 @@ def create_heat_map(speeding_data, postcode_data):
 
     gmap = gmplot.GoogleMapPlotter(-33.8688, 151.2093, 10)
     gmap.heatmap(latitudes, longitudes)
+    gmap.draw("test.html")'''
+
+def drop_pins(speeding_data, postcode_data):   
+    h_fine, h_pcode = retrieve_ranked_n(speeding_data,10,top = True)
+    latitude = []
+    longitude = []
+    
+    gmap = gmplot.GoogleMapPlotter(-33.8688, 151.2093, 10)
+    
+    for entry in postcode_data:
+        for h_p in h_pcode:
+            if postcode_data[entry][0] == h_p:
+                lat = postcode_data[entry][1]
+                lon = postcode_data[entry][2]
+                latitude.append(lat)
+                longitude.append(lon)
+                
+    gmap.scatter(latitude, longitude,color='#FF6666',marker=True)          
     gmap.draw("test.html")
     
 curr_sheet, data_2014, data_2015 = retrieve_speeding_data("./speeding_stats.xlsx")
 collated_data, metro_pcode = retrieve_postocde_data("./Australian_Post_Codes_Lat_Lon.xlsx")
 
-create_heat_map(data_2014, collated_data)
+drop_pins(data_2014, collated_data)
