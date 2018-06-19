@@ -1,7 +1,8 @@
 import openpyxl
 import folium
+from folium import plugins
 from colour import Color
-#bar graph
+import string
 
 def retrieve_speeding_data(file_name):
     data_2014 = {}
@@ -127,55 +128,59 @@ def text_results(data_2014, data_2015, n):
         else:
             print(str(p + 1) + '.\t', h_pcode[p], "$" + str(h_fine[p]) + ' - Regional')
 
-'''def create_heat_map(speeding_data, postcode_data):
-    #tried implementing but doesn't work as intended
-    latitudes = []
-    longitudes = []
-    
-    for entry in postcode_data:
-        pcode = postcode_data[entry][0]
-        if pcode in speeding_data:
-            fine_total = speeding_data[pcode][0][0] + speeding_data[pcode][1][0]
-            mod_fine_total = fine_total % 100
-            for i in range(mod_fine_total):
-                latitudes.append(postcode_data[entry][1])
-                longitudes.append(postcode_data[entry][2])
 
-    gmap = gmplot.GoogleMapPlotter(-33.8688, 151.2093, 10)
-    gmap.heatmap(latitudes, longitudes)
-    gmap.draw("test.html")'''
-
-def circle_ranked_n(speeding_data, postcode_data):   
-    h_fine, h_pcode = retrieve_ranked_n(speeding_data,10,top = True)
+def circle_ranked_n(speeding_data, postcode_data, year):
+    t = input("Retrieve top or bottom speeders T/B: ")
+    n = int(input("How many entries (number between 1 and 300): "))
+    h_fine, h_pcode = retrieve_ranked_n(speeding_data,n,top = t == "T")
     latitude = []
     longitude = []
     red = Color("red")
-    orange = Color("Orange")
-    colors = list(red.range_to(orange,10))
-    map_osm = folium.Map(location=[-33.8688, 151.2093],zoom_start = 13)
+    blue = Color("blue")
+    if t == "T":
+        colors = list(red.range_to(blue,n))
+    else:
+        colors = list(blue.range_to(red,n))
+        
+    map_osm = folium.Map(location=[-33.8688, 151.2093],zoom_start = 10)
     
     for h_p in h_pcode:
         avg_lat = 0
         avg_lon = 0
         total = 0
+        suburbs = []
+        fine = speeding_data[h_p][0][1] + speeding_data[h_p][1][1]
         for entry in postcode_data:
             if postcode_data[entry][0] == h_p:
                 avg_lat += postcode_data[entry][1]
                 avg_lon += postcode_data[entry][2]
+                suburbs.append(entry.title())
                 total += 1
-        msg = str(h_p) + " - Ranked " + str(h_pcode.index(h_p)+1) +" for Speeding Fines"
+        if t == "T":
+            msg = "<b>" + str(h_p) + "</b>" + "<br>Ranked <b>" + str(h_pcode.index(h_p)+1) +"</b>/596 for Speeding Fines<br>Total Fines - $<b>" + str(fine) + "</b><br>"
+        else:
+            msg = "<b>" + str(h_p) + "</b>" + "<br>Ranked <b>" + str(595 - h_pcode.index(h_p)+1) +"</b>/596 for Speeding Fines<br>Total Fines - $<b>" + str(fine) + "</b><br>"
+        msg += ', '.join(sorted(suburbs))
         c = colors[h_pcode.index(h_p)]
-        folium.CircleMarker([avg_lat/total,avg_lon/total],
-                    radius=75,
-                    popup=msg,
-                    color=c.hex,
-                    fill_color=c.hex,
-                    fill = True
-                   ).add_to(map_osm)   
-                
-    map_osm.save("test.html")
+
+        if total != 0:
+            folium.CircleMarker([avg_lat/total,avg_lon/total],
+                        radius=75,
+                        popup=msg,
+                        color=c.hex,
+                        fill_color=c.hex,
+                        fill = True
+                       ).add_to(map_osm)   
+    file = ""
+    if t == "T":
+        file += "Top "
+    else:
+        file += "Bottom "
+
+    file += str(n) + " Postcodes for Speeding {}.html".format(year)
+    
+    map_osm.save(file)
+
     
 curr_sheet, data_2014, data_2015 = retrieve_speeding_data("./speeding_stats.xlsx")
 collated_data, metro_pcode = retrieve_postocde_data("./Australian_Post_Codes_Lat_Lon.xlsx")
-
-circle_ranked_n(data_2014, collated_data)
