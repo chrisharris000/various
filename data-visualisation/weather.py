@@ -1,68 +1,47 @@
 #! /usr/bin/python
 import os
 import feedparser
+import xml.etree.ElementTree as ET
 import urllib
 
 def import_data():
-    data = urllib.request.urlopen("ftp://ftp2.bom.gov.au/anon/gen/fwo/IDN10064.txt") #sydney's forcast
-    info = []
-    for line in data:
-        line = line.decode("utf-8").replace("\n","")
-        info.append(line)
-    return info
+    data = urllib.request.urlopen("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
+    tree = ET.parse(data)
+    root = tree.getroot()
+    return root
 
-def prettify_data(info):
-    last_issue = ""
-    text_today = ""
-    city_sum = []
-    penrith_sum = []
-    syd_sum = []
+def extract_data(root):
+    last_issue = root[0][3].text
+    next_issue = root[0][9].text
+    locations = {}
     
-    for line in info:
-        if line == "Sydney Forecast":
-            time_i = info.index(line)
-            last_issue = info[time_i+1]
-
-        if line.startswith("Forecast for the rest of"):
-            text_i = info.index(line)
-            text_today = info[text_i+1]
-
-        if line.startswith("City Centre"):
-            rain_chance_i = info.index(line) + 1
-            summary = ' '.join(line.split())
-            rain_chance = info[rain_chance_i].strip()
-            city_sum.append([summary,rain_chance])
-
-        if line.startswith("Penrith"):
-            rain_chance_i = info.index(line) + 1
-            summary = ' '.join(line.split())
-            rain_chance = info[rain_chance_i].strip()
-            penrith_sum.append([summary,rain_chance])
-
-        if line == "Around Sydney":
-            next_i = info.index(line) + 1
-            for i in range(3):
-                s = info[next_i].split()
-                if s[0] == "Liverpool":
-                    location = s[3] + " " + s[4]
-                    syd_sum.append([s[0],s[2]])
-                    syd_sum.append([location,s[6]])
+    forecast = root[1]
+    for child in forecast:
+        if child.attrib["aac"].startswith("NSW_PT"):
+            town = child.attrib["description"]
+            week_summary = []
+            for day in child:
+                start_period = day.attrib["start-time-local"]
+                end_period = day.attrib["end-time-local"]
+                weather_num = day.find("./element[@type='forecast_icon_code']").text
+                max_temp = day.find("./element[@type='air_temperature_maximum']").text
+                if day.find("./element[@type='air_temperature_minimum']") != None:
+                    min_temp = day.find("./element[@type='air_temperature_minimum']").text
                 else:
-                    syd_sum.append([s[0],s[2]])
-                    syd_sum.append([s[3],s[5]])
-                next_i += 1
+                    min_temp = max_temp
+                precis = day.find("./text[@type='precis']").text
+                rain_chance = day.find("./text[@type='probability_of_precipitation']").text
+                if day.find("./element[@type='precipitation_range']") != None:
+                    precip_range = day.find("./element[@type='precipitation_range']").text
+                else:
+                    precip_range = -1
+                week_summary.append([start_period, end_period, weather_num,
+                                   max_temp, min_temp, precis, rain_chance, precip_range])
             
-    return last_issue, text_today, city_sum, penrith_sum, syd_sum
+            locations[town] = week_summary
+    return locations
                     
-info = import_data()
-p = prettify_data(info)
-print("Last issue")
-print(p[0])
-print("Text today")
-print(p[1])
-print("City Summary")
-print(p[2])
-print("Penrith Summary")
-print(p[3])
-print("Sydney Summary")
-print(p[4])
+root = import_data()
+locations = extract_data(root)
+
+'''Weather symbols/meaning https://github.com/sirleech/weather_feed'''
