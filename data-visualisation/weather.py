@@ -1,5 +1,4 @@
 #! /usr/bin/python
-import os
 import feedparser
 import xml.etree.ElementTree as ET
 import urllib
@@ -24,24 +23,39 @@ def extract_data(root):
                 start_period = day.attrib["start-time-local"]
                 end_period = day.attrib["end-time-local"]
                 weather_num = day.find("./element[@type='forecast_icon_code']").text
-                max_temp = day.find("./element[@type='air_temperature_maximum']").text
+                
+                if day.find("./element[@type='air_temperature_maximum']") != None:
+                    max_temp = day.find("./element[@type='air_temperature_maximum']").text
+                else:
+                    max_temp = "Unavailable"
+                    
                 if day.find("./element[@type='air_temperature_minimum']") != None:
                     min_temp = day.find("./element[@type='air_temperature_minimum']").text
                 else:
-                    min_temp = max_temp
+                    min_temp = "Unavailable"
+                    
                 precis = day.find("./text[@type='precis']").text
                 rain_chance = day.find("./text[@type='probability_of_precipitation']").text
+                
                 if day.find("./element[@type='precipitation_range']") != None:
                     precip_range = day.find("./element[@type='precipitation_range']").text
                 else:
-                    precip_range = -1
+                    precip_range = "Unavailable"
+                    
                 week_summary.append([start_period, end_period, weather_num,
                                    max_temp, min_temp, precis, rain_chance, precip_range])
             
             locations[town] = week_summary
     return locations
-                    
+
+def format_time(s):
+    d,t = s.split("T")
+    if t.endswith("Z"):
+        t = t.replace("Z","")
+    else:
+        t = t.split("+")[0]
+    return d,t
+                   
 root = import_data()
 locations = extract_data(root)
-
 '''Weather symbols/meaning https://github.com/sirleech/weather_feed'''
