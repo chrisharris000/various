@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import urllib
 from tkinter import *
 from tkinter.ttk import *
-import time
 
 def import_data():
     data = urllib.request.urlopen("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
@@ -17,6 +16,7 @@ def extract_data(root,REGIONS):
     next_issue = root[0][9].text
     locations = {}
     region_summary = {}
+    region_town_summary = {}
     
     forecast = root[1]
     for child in forecast:
@@ -54,11 +54,13 @@ def extract_data(root,REGIONS):
 
     for t in REGIONS:
         region_summary[REGIONS[t]] = []
+        region_town_summary[REGIONS[t]] = []
     
     for t in locations:
         region_summary[locations[t][0]].append([t,locations[t][1]])
-
-    return region_summary
+        region_town_summary[locations[t][0]].append(t)
+    
+    return region_summary, region_town_summary
 
 def format_time(s):
     d,t = s.split("T")
@@ -74,35 +76,16 @@ def create_window():
     window.geometry('600x600')
     return window
 
-def create_region_dropdown(window, REGIONS):
-    regions = sorted(REGIONS.values())
-    region_dropdown = Combobox(window)
-    region_dropdown.bind("<<ComboboxSelected>>", handle_region_change)
-    region_dropdown["values"] = tuple(regions)
-    region_dropdown.current(regions.index("Sydney Metropolitan"))
-    region_dropdown.grid(row = 0, column = 0)
-    return region_dropdown
+def update_options(*args):
+        
+        region = region_town_summary[region_var.get()]
+        area_var.set(region[0])
 
-def create_area_dropdown(window, region_value, region_summary):
-    areas = []
-    for r in region_summary:
-        if r == region_value:
-            for town in region_summary[r]:
-                areas.append(town[0])
-    areas = sorted(areas)
-    
-    area_dropdown = Combobox(window)
-    area_dropdown.bind("<<ComboboxSelected>>", handle_area_change)
-    area_dropdown["values"] = tuple(areas)
-    area_dropdown.current(areas.index("Parramatta"))
-    area_dropdown.grid(row = 0, column = 1)
-    return area_dropdown
+        menu = area_optionmenu['menu']
+        menu.delete(0, 'end')
 
-def handle_region_change(event):
-    region_var.set(region_dropdown.get())
-
-def handle_area_change(event):
-    area_var.set(area_dropdown.get())
+        for area in region:
+            menu.add_command(label=area, command=lambda locality=area: area_var.set(locality))
 
 REGIONS = {"NSW_PW005":"Sydney Metropolitan",
                "NSW_PW017":"Australian Capital Territory",
@@ -122,22 +105,25 @@ REGIONS = {"NSW_PW005":"Sydney Metropolitan",
                "NSW_PW016":"Upper Western",
                "NSW_PW010":"Snowy Mountains"}
 
-root = import_data()
-region_summary = extract_data(root,REGIONS)
+#root = import_data()
+#region_weather_summary, region_town_summary = extract_data(root,REGIONS)
+
+region_town_summary = {'Snowy Mountains': ['Jindabyne', 'Bombala', 'Charlotte Pass', 'Cooma', 'Thredbo Top Station', 'Perisher Valley', 'Selwyn', 'Cabramurra'], 'Hunter': ['The Entrance', 'Cessnock', 'Gosford', 'Scone', 'Muswellbrook', 'Wallsend', 'Wyong', 'Toronto', 'Raymond Terrace', 'Maitland', 'Woy Woy', 'Singleton', 'Nelson Bay', 'Newcastle'], 'Central Tablelands': ['Springwood', 'Wellington', 'Katoomba', 'Orange', 'Bathurst', 'Jenolan Caves', 'Mudgee', 'Lithgow'], 'Upper Western': ['Bourke', 'Wilcannia', 'Tibooburra', 'Cobar', 'Brewarrina'], 'Illawarra': ['Port Kembla', 'Albion Park', 'Wollongong', 'Bulli', 'Huskisson', 'Bowral', 'Kiama', 'Nowra'], 'Riverina': ['Albury', 'Deniliquin', 'Junee', 'Finley', 'Griffith', 'Narrandera', 'Wagga Wagga', 'Hay', 'Corowa'], 'Lower Western': ['Menindee', 'Broken Hill', 'Ivanhoe', 'Wentworth', 'Balranald', 'Lake Mungo'], 'South Coast': ['Batemans Bay', 'Ulladulla', 'Eden', 'Bega', 'Monolith Valley', 'Narooma', 'Merimbula'], 'Northern Rivers': ['Byron Bay', 'Murwillumbah', 'Evans Head', 'Lismore', 'Ballina', 'Yamba', 'Tweed Heads', 'Grafton'], 'Central West Slopes and Plains': ['Coonamble', 'Parkes', 'West Wyalong', 'Lake Cargelligo', 'Dubbo', 'Condobolin', 'Cowra', 'Coonabarabran', 'Narromine', 'Temora', 'Nyngan', 'Forbes'], 'Australian Capital Territory': ['Belconnen', 'Canberra', 'Woden Valley', 'Mount Ginini', 'Gungahlin', 'Tuggeranong'], 'North West Slopes and Plains': ['Barraba', 'Warialda', 'Moree', 'Narrabri', 'Tamworth', 'Gunnedah', 'Walgett', 'Wee Waa', 'Quirindi'], 'South West Slopes': ['Gundagai', 'Cootamundra', 'Tumut', 'Young', 'Tumbarumba'], 'Mid North Coast': ['Taree', 'Port Macquarie', 'Wauchope', 'Barrington Tops', 'Nambucca Heads', 'Bulahdelah', 'Coffs Harbour', 'Forster', 'Kempsey', 'Dorrigo'], 'Southern Tablelands': ['Queanbeyan', 'Crookwell', 'Goulburn', 'Braidwood', 'Yass'], 'Northern Tablelands': ['Guyra', 'Glen Innes', 'Walcha', 'Armidale', 'Inverell', 'Tenterfield'], 'Sydney Metropolitan': ['Sydney Olympic Park', 'Blacktown', 'Richmond', 'Mascot', 'Canterbury', 'Terrey Hills', 'Hornsby', 'Cronulla', 'Sydney', 'Parramatta', 'Camden', 'Campbelltown', 'Mona Vale', 'Bondi', 'Liverpool', 'Penrith']}
 
 window = create_window()
-region_dropdown = create_region_dropdown(window, REGIONS)
-area_dropdown = create_area_dropdown(window, "Sydney Metropolitan", region_summary)
 
 region_var = StringVar()
-region_var.set("Sydney Metropolitan")
-region_lbl = Label(window,textvariable=region_var).grid(row = 0, column = 2)
 area_var = StringVar()
-area_var.set("Parramatta")
-area_lbl = Label(window,textvariable=area_var).grid(row = 0, column = 3)
 
+region_var.trace('w', update_options)
+
+region_optionmenu = OptionMenu(window, region_var, *(region_town_summary.keys()))
+area_optionmenu = OptionMenu(window, area_var, '')
+
+region_var.set('Snowy Mountains')
+region_optionmenu.grid(row = 0, column = 0)
+area_optionmenu.grid(row = 0, column = 1)
+   
 window.mainloop()
 
-#root = import_data()
-#locations = extract_data(root)
 '''Weather symbols/meaning https://github.com/sirleech/weather_feed'''
