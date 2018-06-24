@@ -4,43 +4,54 @@ import weather_format
 #use one trace on area to produce entire week output
 
 def update_options(*args):
-        region = region_town_summary[region_var.get()]
-        area_var.set(region[0])
-
-        menu = area_optionmenu['menu']
-        menu.delete(0, 'end')
-
-        for area in region:
-            menu.add_command(label=area, command=lambda locality=area: area_var.set(locality))
+    region = region_town_summary[region_var.get()]
+    area_var.set(region[0])
+    menu = area_optionmenu['menu']
+    menu.delete(0, 'end')
+    for area in region:
+        menu.add_command(label=area, command=lambda locality=area: area_var.set(locality))
 
 def update_summary(*args):
-        week_weather = get_week_weather(region_weather_summary, region_var, area_var)
-        r = 10
-        for day in week_weather:
-                max_temp_var = StringVar()
-                max_temp_var.set(day[3])
-                max_temp_lbl = Label(window,textvariable = max_temp_var)
-                max_temp_lbl.grid(row = r, column = 0)
-                r += 1
+    week_weather = get_week_weather(region_weather_summary, region_var, area_var)
+    r = 10
+    c = 0
+    for day in week_weather:
+        for value in day:
+            delete_label(r, c)
+            create_label(value,r,c)
+            c += 1
+        c = 0
+        r += 1
 
 def update_week_weather(*args):
-        week_summary = get_week_weather(region_weather_summary, region_var, area_var)[0]
-        for v in var_list:
-                data = week_summary[var_list.index(v)]
-                v.set(data)
+    week_summary = get_week_weather(region_weather_summary, region_var, area_var)[0]
+    for v in var_list:
+        data = week_summary[var_list.index(v)]
+        v.set(data)
 
 def create_window():
     window = Tk()
     window.title("Weather Forecast")
-    window.geometry('600x600')
+    window.geometry('800x600')
     return window
 
-def get_week_weather(region_weather_summary, region_var, area_var):       
-        region_weather = region_weather_summary[region_var.get()]
-        for suburb in region_weather:
-                if suburb[0] == area_var.get():
-                        week_weather = suburb[1][1:]
-        return week_weather
+def get_week_weather(region_weather_summary, region_var, area_var):
+    region_weather = region_weather_summary[region_var.get()]
+    for suburb in region_weather:
+        if suburb[0] == area_var.get():
+            week_weather = suburb[1]
+    return week_weather
+
+def create_label(text, row, column):
+    var = StringVar()
+    var.set(text)
+    lbl = Label(window,textvariable = var)
+    lbl.grid(row = row, column = column)
+
+def delete_label(row, column):
+    for label in window.grid_slaves():
+        if int(label.grid_info()["row"]) == row and int(label.grid_info()["column"]) == column:
+            label.grid_forget()
 
 root = weather_format.import_data()
 REGIONS = weather_format.region_codes()
