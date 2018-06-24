@@ -71,23 +71,6 @@ def format_time(s):
         t = t.split("+")[0]
     return d,t
 
-def create_window():
-    window = Tk()
-    window.title("Weather Forecast")
-    window.geometry('600x600')
-    return window
-
-def update_options(*args):
-        
-        region = region_town_summary[region_var.get()]
-        area_var.set(region[0])
-
-        menu = area_optionmenu['menu']
-        menu.delete(0, 'end')
-
-        for area in region:
-            menu.add_command(label=area, command=lambda locality=area: area_var.set(locality))
-
 def region_codes():
     REGIONS = {"NSW_PW005":"Sydney Metropolitan",
                "NSW_PW017":"Australian Capital Territory",
