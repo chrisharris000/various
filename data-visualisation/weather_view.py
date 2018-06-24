@@ -1,6 +1,8 @@
 from tkinter import *
 import weather_format
 
+#use one trace on area to produce entire week output
+
 def update_options(*args):
         region = region_town_summary[region_var.get()]
         area_var.set(region[0])
@@ -17,6 +19,12 @@ def update_summary(*args):
         end_var.set(current_weather[1])
         precis_var.set(current_weather[5])
 
+def update_week_weather(*args):
+        week_summary = get_week_weather(region_weather_summary, region_var, area_var)[0]
+        for v in var_list:
+                data = week_summary[var_list.index(v)]
+                v.set(data)
+
 def create_window():
     window = Tk()
     window.title("Weather Forecast")
@@ -31,11 +39,23 @@ def get_current_weather(region_weather_summary, region_var, area_var):
         return weather_today
 
 def get_week_weather(region_weather_summary, region_var, area_var):       
-        region_weather = region_weather_summary[region_var]
+        region_weather = region_weather_summary[region_var.get()]
         for suburb in region_weather:
-                if suburb[0] == area_var:
+                if suburb[0] == area_var.get():
                         week_weather = suburb[1][1:]
         return week_weather
+
+def create_widgets(window, day_summary):
+        lbl_list = []
+        var_list = []
+        for data in day_summary:
+                temp_var = StringVar()
+                temp_var.set(data)
+                lbl = Label(window, textvariable = temp_var)
+                lbl.grid(row = 12 + day_summary.index(data), column = 0)
+                lbl_list.append(lbl)
+                var_list.append(temp_var)
+        return lbl_list,var_list
 
 root = weather_format.import_data()
 REGIONS = weather_format.region_codes()
@@ -76,6 +96,10 @@ curr_weather_lbl = Label(window,text = "Summary of Weather Today")
 start_lbl = Label(window, textvariable = start_var)
 end_lbl = Label(window, textvariable = end_var)
 precis_lbl = Label(window, textvariable = precis_var)
+
+#tomorrow Label creation
+week_summary = get_week_weather(region_weather_summary, region_var, area_var)
+lbl_list,var_list = create_widgets(window, week_summary[0])
 
 #place widgets in window
 title_lbl.grid(row = 0, column = 3)
