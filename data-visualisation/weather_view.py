@@ -1,8 +1,6 @@
 from tkinter import *
 import weather_format
 
-#use one trace on area to produce entire week output
-
 def update_options(*args):
     region = region_town_summary[region_var.get()]
     area_var.set(region[0])
@@ -18,6 +16,9 @@ def update_summary(*args):
     for day in week_weather:
         for value in day:
             delete_label(r, c)
+            if day.index(value) == 0 or day.index(value) == 1:
+                value = weather_format.format_time(value)
+                value = weather_format.get_day(value[0]) + " " + value[0] + " " + value[1]
             create_label(value,r,c)
             c += 1
         c = 0
@@ -32,7 +33,6 @@ def update_week_weather(*args):
 def create_window():
     window = Tk()
     window.title("Weather Forecast")
-    window.geometry('800x600')
     return window
 
 def get_week_weather(region_weather_summary, region_var, area_var):
@@ -81,6 +81,10 @@ title_lbl = Label(window, text = "Weather Forecast")
 region_lbl = Label(window, textvariable = region_var)
 area_lbl = Label(window, textvariable = area_var)
 
+headings = ["Start of Period", "End of Period", "", "Min Temp °C", "Max Temp °C",
+            "Description", "Probability of Precipitation", "Precipitation Range"]
+for c in range(8):
+    create_label(headings[c], 4, c)
 curr_weather_lbl = Label(window,text = "Summary of Weather for the Week")
 
 

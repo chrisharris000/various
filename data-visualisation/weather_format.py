@@ -2,8 +2,7 @@
 import feedparser
 import xml.etree.ElementTree as ET
 import urllib
-from tkinter import *
-from tkinter.ttk import *
+import datetime
 
 def import_data():
     data = urllib.request.urlopen("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
@@ -48,7 +47,7 @@ def extract_data(root,REGIONS):
                     precip_range = "Unavailable"
                     
                 week_summary.append([start_period, end_period, weather_num,
-                                   max_temp, min_temp, precis, rain_chance, precip_range])
+                                   min_temp, max_temp, precis, rain_chance, precip_range])
             
             locations[town] = [region, week_summary]
 
@@ -90,3 +89,6 @@ def region_codes():
                "NSW_PW016":"Upper Western",
                "NSW_PW010":"Snowy Mountains"}
     return REGIONS
+
+def get_day(date):
+    return datetime.datetime.strptime(date,"%Y-%m-%d").strftime("%a")
