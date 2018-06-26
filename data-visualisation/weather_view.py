@@ -98,6 +98,8 @@ for c in range(8):
     create_label(headings[c], 4, c)
 curr_weather_lbl = Label(window,text = "Summary of Weather for the Week")
 
+#style labels
+title_lbl.config(font=(None, 20, "bold"))
 
 #place widgets in window
 title_lbl.grid(row = 0, column = 3)
