@@ -1,4 +1,5 @@
 from tkinter import *
+from PIL import Image, ImageTk
 import weather_format
 
 def update_options(*args):
@@ -16,10 +17,20 @@ def update_summary(*args):
     for day in week_weather:
         for value in day:
             delete_label(r, c)
-            if day.index(value) == 0 or day.index(value) == 1:
-                value = weather_format.format_time(value)
-                value = weather_format.get_day(value[0]) + " " + value[0] + " " + value[1]
-            create_label(value,r,c)
+            if c == 2:
+                file = weather_format.code_to_file(int(value))
+                image = Image.open(file)
+                photo = ImageTk.PhotoImage(image)
+                icon_lbl = Label(image = photo)
+                icon_lbl.image = photo
+                icon_lbl.grid(row = r, column = c)
+            
+            else:
+                if day.index(value) == 0 or day.index(value) == 1:
+                    value = weather_format.format_time(value)
+                    value = weather_format.get_day(value[0]) + " " + value[0] + " " + value[1]
+                create_label(value,r,c)
+                
             c += 1
         c = 0
         r += 1

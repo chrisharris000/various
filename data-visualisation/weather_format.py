@@ -92,3 +92,24 @@ def region_codes():
 
 def get_day(date):
     return datetime.datetime.strptime(date,"%Y-%m-%d").strftime("%a")
+
+def code_to_file(n):
+    codes = {1:"sunny",
+             2:"clear",
+             3:"partly-cloudy",
+             4:"cloudy",
+             6:"hazy",
+             8:"light-rain",
+             9:"windy",
+             10:"fog",
+             11:"shower",
+             12:"rain",
+             13:"dusty",
+             14:"frost",
+             15:"snow",
+             16:"storm",
+             17:"light-shower"
+        }
+
+    file = "./icons/" + codes.get(n,"error") + ".png"
+    return file
