@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+import webbrowser
 import weather_format
 
 def update_options(*args):
@@ -53,16 +54,26 @@ def get_week_weather(region_weather_summary, region_var, area_var):
             week_weather = suburb[1]
     return week_weather
 
-def create_label(text, row, column):
+def create_label(text, row, column, pad = False):
     var = StringVar()
     var.set(text)
     lbl = Label(window,textvariable = var)
-    lbl.grid(row = row, column = column)
+    if pad == True:
+        lbl.grid(row = row, column = column, padx = 10)
+    else:
+        lbl.grid(row = row, column = column)
+    return lbl
 
 def delete_label(row, column):
     for label in window.grid_slaves():
         if int(label.grid_info()["row"]) == row and int(label.grid_info()["column"]) == column:
             label.grid_forget()
+
+def open_data():
+    webbrowser.open("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
+
+def open_github():
+    webbrowser.open("https://github.com/chrisharris000")
 
 root = weather_format.import_data()
 REGIONS = weather_format.region_codes()
@@ -79,9 +90,13 @@ area_var = StringVar()
 region_var.trace('w', update_options)
 area_var.trace('w',update_summary)
 
-#create fropdown menus
+#create dropdown menus
 region_optionmenu = OptionMenu(window, region_var, *sorted((region_town_summary.keys())))
 area_optionmenu = OptionMenu(window, area_var, '')
+
+#create buttons
+data_btn = Button(window, text = "BOM Data Source", command=open_data)
+github_btn = Button(window, text = "GitHub", command=open_github)
 
 #initialise StringVar() 's
 region_var.set('Sydney Metropolitan')
@@ -89,27 +104,31 @@ area_var.set("Parramatta")
 
 #initialise Labels with values
 title_lbl = Label(window, text = "Weather Forecast")
-region_lbl = Label(window, textvariable = region_var)
-area_lbl = Label(window, textvariable = area_var)
 
 headings = ["Start of Period", "End of Period", "", "Min Temp °C", "Max Temp °C",
             "Description", "Probability of Precipitation", "Precipitation Range"]
+heading_lbls = []
 for c in range(8):
-    create_label(headings[c], 4, c)
-curr_weather_lbl = Label(window,text = "Summary of Weather for the Week")
+    lbl = create_label(headings[c] + '\n', 4, c, pad = True)
+    heading_lbls.append(lbl)
+    
+curr_weather_lbl = Label(window,text = "Summary of Weather for the Week\n")
+data_lbl = Label(window, text = "\nWeather Data: ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml\n\nCreated by Chris - https://github.com/chrisharris000")
 
 #style labels
 title_lbl.config(font=(None, 20, "bold"))
+curr_weather_lbl.config(font=(None,15,"bold"))
+for l in heading_lbls:
+    l.config(font=(None,12,"bold"))
 
 #place widgets in window
-title_lbl.grid(row = 0, column = 3)
+title_lbl.grid(row = 0, column = 0)
 region_optionmenu.grid(row = 1, column = 0)
-region_lbl.grid(row = 1, column = 3)
-area_optionmenu.grid(row = 1, column = 1)
-area_lbl.grid(row = 1, column = 4)
+area_optionmenu.grid(row = 2, column = 0)
+curr_weather_lbl.grid(row = 3, column = 3, columnspan = 2)
+data_lbl.grid(row = 20, column = 0)
+data_btn.grid(row = 21, column = 0)
+github_btn.grid(row = 21, column = 1)
 
-curr_weather_lbl.grid(row = 2, column = 3)
-
+window.iconbitmap('sunny_icon.ico')
 window.mainloop()
-
-'''Weather symbols/meaning https://github.com/sirleech/weather_feed'''

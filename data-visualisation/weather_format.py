@@ -108,7 +108,8 @@ def code_to_file(n):
              14:"frost",
              15:"snow",
              16:"storm",
-             17:"light-shower"
+             17:"light-shower",
+             18:"shower"
         }
 
     file = "./icons/" + codes.get(n,"error") + ".png"
