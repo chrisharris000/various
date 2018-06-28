@@ -73,7 +73,7 @@ def open_data():
     webbrowser.open("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
 
 def open_github():
-    webbrowser.open("https://github.com/chrisharris000")
+    webbrowser.open("https://github.com/chrisharris000/various/tree/master/weather")
 
 root = weather_format.import_data()
 REGIONS = weather_format.region_codes()
