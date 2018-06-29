@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script>L_PREFER_CANVAS = false; L_NO_TOUCH = false; L_DISABLE_3D = false;</script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <style> #map_7fdb5218584a4431b49ff63e8779727a {
+                position : relative;
+                width : 100.0%;
+                height: 100.0%;
+                left: 0.0%;
+                top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_7fdb5218584a4431b49ff63e8779727a" ></div>
+        
+</body>
+<script>    
+    
+
+            
+                var bounds = null;
+            
+
+            var map_7fdb5218584a4431b49ff63e8779727a = L.map(
+                                  'map_7fdb5218584a4431b49ff63e8779727a',
+                                  {center: [-33.8688,151.2093],
+                                  zoom: 10,
+                                  maxBounds: bounds,
+                                  layers: [],
+                                  worldCopyJump: false,
+                                  crs: L.CRS.EPSG3857
+                                 });
+            
+        
+    
+            var tile_layer_cf350cce38cf4697bb8e3ef456d3c632 = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+  "attribution": null,
+  "detectRetina": false,
+  "maxZoom": 18,
+  "minZoom": 1,
+  "noWrap": false,
+  "subdomains": "abc"
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+        
+    
+            var circle_marker_bbaa08c828de4c468df749889d9207c7 = L.circleMarker(
+                [-35.183898,143.523043],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#00f",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#00f",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_389ea7b0f18743d0a025f1bf7015541c = L.popup({maxWidth: '300'});
+
+            
+                var html_ba389b7a73174c0d978334c996140d23 = $('<div id="html_ba389b7a73174c0d978334c996140d23" style="width: 100.0%; height: 100.0%;"><b>2735</b><br>Ranked <b>596</b>/596 for Speeding Fines<br>Total Fines - $<b>248</b><br>Speewa</div>')[0];
+                popup_389ea7b0f18743d0a025f1bf7015541c.setContent(html_ba389b7a73174c0d978334c996140d23);
+            
+
+            circle_marker_bbaa08c828de4c468df749889d9207c7.bindPopup(popup_389ea7b0f18743d0a025f1bf7015541c);
+
+            
+        
+    
+            var circle_marker_1dc44947347d45d4943b6ec6d36434f4 = L.circleMarker(
+                [-31.55247,159.081217],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#0071ff",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#0071ff",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_7e0637e4239a4eae9fbbdf10d07cbf7c = L.popup({maxWidth: '300'});
+
+            
+                var html_8fbfc2445e6247cb98c4f37901435824 = $('<div id="html_8fbfc2445e6247cb98c4f37901435824" style="width: 100.0%; height: 100.0%;"><b>2898</b><br>Ranked <b>595</b>/596 for Speeding Fines<br>Total Fines - $<b>572</b><br>Lord Howe Island</div>')[0];
+                popup_7e0637e4239a4eae9fbbdf10d07cbf7c.setContent(html_8fbfc2445e6247cb98c4f37901435824);
+            
+
+            circle_marker_1dc44947347d45d4943b6ec6d36434f4.bindPopup(popup_7e0637e4239a4eae9fbbdf10d07cbf7c);
+
+            
+        
+    
+            var circle_marker_a4576809a9fe4a018b417af9c085ea46 = L.circleMarker(
+                [-29.0408,167.9547],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#00e3ff",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#00e3ff",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_08fe50e0f539411a8d30e85c46b69c38 = L.popup({maxWidth: '300'});
+
+            
+                var html_245b95557b96444ab6f9d339c68ca95c = $('<div id="html_245b95557b96444ab6f9d339c68ca95c" style="width: 100.0%; height: 100.0%;"><b>2899</b><br>Ranked <b>594</b>/596 for Speeding Fines<br>Total Fines - $<b>653</b><br>Norfolk Island</div>')[0];
+                popup_08fe50e0f539411a8d30e85c46b69c38.setContent(html_245b95557b96444ab6f9d339c68ca95c);
+            
+
+            circle_marker_a4576809a9fe4a018b417af9c085ea46.bindPopup(popup_08fe50e0f539411a8d30e85c46b69c38);
+
+            
+        
+    
+            var circle_marker_60f213be0c754cb1ac374b84877e82ba = L.circleMarker(
+                [-33.936693,149.046361],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#0fa",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#0fa",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_4aaaa7f3f58c4b74a6c7c7dcc40a7343 = L.popup({maxWidth: '300'});
+
+            
+                var html_038b66736bf048eb883f56e938bd7056 = $('<div id="html_038b66736bf048eb883f56e938bd7056" style="width: 100.0%; height: 100.0%;"><b>2808</b><br>Ranked <b>593</b>/596 for Speeding Fines<br>Total Fines - $<b>679</b><br>Wyangala</div>')[0];
+                popup_4aaaa7f3f58c4b74a6c7c7dcc40a7343.setContent(html_038b66736bf048eb883f56e938bd7056);
+            
+
+            circle_marker_60f213be0c754cb1ac374b84877e82ba.bindPopup(popup_4aaaa7f3f58c4b74a6c7c7dcc40a7343);
+
+            
+        
+    
+            var circle_marker_0a939c2b520942c087d1e11f5ddff2e6 = L.circleMarker(
+                [-36.295327,148.4227875],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#00ff39",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#00ff39",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_3579d0b9836b4e4bad289ef102923dd9 = L.popup({maxWidth: '300'});
+
+            
+                var html_accd83e1c19f44ccb735f6d2444749c4 = $('<div id="html_accd83e1c19f44ccb735f6d2444749c4" style="width: 100.0%; height: 100.0%;"><b>2624</b><br>Ranked <b>592</b>/596 for Speeding Fines<br>Total Fines - $<b>996</b><br>Kosciuszko, Perisher Valley</div>')[0];
+                popup_3579d0b9836b4e4bad289ef102923dd9.setContent(html_accd83e1c19f44ccb735f6d2444749c4);
+            
+
+            circle_marker_0a939c2b520942c087d1e11f5ddff2e6.bindPopup(popup_3579d0b9836b4e4bad289ef102923dd9);
+
+            
+        
+    
+            var circle_marker_1aa46dd50c8240b38fa1c22718d5c2cf = L.circleMarker(
+                [-29.124435,150.4309925],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#39ff00",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#39ff00",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_075564249f5e4218bf54890fc7855f56 = L.popup({maxWidth: '300'});
+
+            
+                var html_55c568ff17fc46ab8aee5297725022af = $('<div id="html_55c568ff17fc46ab8aee5297725022af" style="width: 100.0%; height: 100.0%;"><b>2411</b><br>Ranked <b>591</b>/596 for Speeding Fines<br>Total Fines - $<b>1101</b><br>Croppa Creek, Yallaroi</div>')[0];
+                popup_075564249f5e4218bf54890fc7855f56.setContent(html_55c568ff17fc46ab8aee5297725022af);
+            
+
+            circle_marker_1aa46dd50c8240b38fa1c22718d5c2cf.bindPopup(popup_075564249f5e4218bf54890fc7855f56);
+
+            
+        
+    
+            var circle_marker_f55821580ef644c6a267358295633cc8 = L.circleMarker(
+                [-34.002136,147.7358215],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#af0",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#af0",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_80c9290c76e84a279b73d264169e1ddc = L.popup({maxWidth: '300'});
+
+            
+                var html_e30f238e4bd7444fbb0734ec4cc4e028 = $('<div id="html_e30f238e4bd7444fbb0734ec4cc4e028" style="width: 100.0%; height: 100.0%;"><b>2721</b><br>Ranked <b>590</b>/596 for Speeding Fines<br>Total Fines - $<b>1116</b><br>Bland, Quandialla</div>')[0];
+                popup_80c9290c76e84a279b73d264169e1ddc.setContent(html_e30f238e4bd7444fbb0734ec4cc4e028);
+            
+
+            circle_marker_f55821580ef644c6a267358295633cc8.bindPopup(popup_80c9290c76e84a279b73d264169e1ddc);
+
+            
+        
+    
+            var circle_marker_5a94062110f24342b4c2d43a853cb8b0 = L.circleMarker(
+                [-35.126762625,143.725285125],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#ff7100",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#ff7100",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_c4cb85c7cde14e96b6110ed7b0c599ec = L.popup({maxWidth: '300'});
+
+            
+                var html_1dfeb78c91a04ecaae1709cfbd6ddff3 = $('<div id="html_1dfeb78c91a04ecaae1709cfbd6ddff3" style="width: 100.0%; height: 100.0%;"><b>2734</b><br>Ranked <b>588</b>/596 for Speeding Fines<br>Total Fines - $<b>1813</b><br>Cunninyeuk, Dilpurra, Kyalite, Mellool, Moolpa, Stony Crossing, Tooranie, Wetuppa</div>')[0];
+                popup_c4cb85c7cde14e96b6110ed7b0c599ec.setContent(html_1dfeb78c91a04ecaae1709cfbd6ddff3);
+            
+
+            circle_marker_5a94062110f24342b4c2d43a853cb8b0.bindPopup(popup_c4cb85c7cde14e96b6110ed7b0c599ec);
+
+            
+        
+    
+            var circle_marker_a75947ca226f457197a07995fc919029 = L.circleMarker(
+                [-34.993286499999996,143.33785749999998],
+                {
+  "bubblingMouseEvents": true,
+  "color": "#f00",
+  "dashArray": null,
+  "dashOffset": null,
+  "fill": true,
+  "fillColor": "#f00",
+  "fillOpacity": 0.2,
+  "fillRule": "evenodd",
+  "lineCap": "round",
+  "lineJoin": "round",
+  "opacity": 1.0,
+  "radius": 75,
+  "stroke": true,
+  "weight": 3
+}
+                ).addTo(map_7fdb5218584a4431b49ff63e8779727a);
+            
+    
+            var popup_7f80a5f776b74532bc79bb70a81a3895 = L.popup({maxWidth: '300'});
+
+            
+                var html_a1d59d47b27f41e4bf5a13c0007e2df2 = $('<div id="html_a1d59d47b27f41e4bf5a13c0007e2df2" style="width: 100.0%; height: 100.0%;"><b>2736</b><br>Ranked <b>587</b>/596 for Speeding Fines<br>Total Fines - $<b>1882</b><br>Goodnight, Tooleybuc</div>')[0];
+                popup_7f80a5f776b74532bc79bb70a81a3895.setContent(html_a1d59d47b27f41e4bf5a13c0007e2df2);
+            
+
+            circle_marker_a75947ca226f457197a07995fc919029.bindPopup(popup_7f80a5f776b74532bc79bb70a81a3895);
+
+            
+        
+</script>
