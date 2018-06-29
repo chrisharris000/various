@@ -75,6 +75,9 @@ def open_data():
 def open_github():
     webbrowser.open("https://github.com/chrisharris000/various/tree/master/weather")
 
+def open_warnings():
+    webbrowser.open("http://www.bom.gov.au/nsw/warnings/")
+    
 root = weather_format.import_data()
 REGIONS = weather_format.region_codes()
 region_weather_summary, region_town_summary = weather_format.extract_data(root, REGIONS)
@@ -97,6 +100,7 @@ area_optionmenu = OptionMenu(window, area_var, '')
 #create buttons
 data_btn = Button(window, text = "BOM Data Source", command=open_data)
 github_btn = Button(window, text = "GitHub", command=open_github)
+warning_btn = Button(window, text = "Current Warnings", command=open_warnings)
 
 #initialise StringVar() 's
 region_var.set('Sydney Metropolitan')
@@ -129,6 +133,7 @@ curr_weather_lbl.grid(row = 3, column = 3, columnspan = 2)
 data_lbl.grid(row = 20, column = 0)
 data_btn.grid(row = 21, column = 0)
 github_btn.grid(row = 21, column = 1)
+warning_btn.grid(row = 19, column = 0)
 
 window.iconbitmap('sunny_icon.ico')
 window.mainloop()
