@@ -1,14 +1,24 @@
 #! /usr/bin/python
 import feedparser
 import xml.etree.ElementTree as ET
-import urllib
+from urllib.request import Request, urlopen
+from urllib.error import URLError
 import datetime
+import sys
 
 def import_data():
-    data = urllib.request.urlopen("ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml")
-    tree = ET.parse(data)
-    root = tree.getroot()
-    return root
+    url = "ftp://ftp.bom.gov.au/anon/gen/fwo/IDN11060.xml"
+    req = Request(url)
+    try:
+        response = urlopen(req)
+    except URLError as e:
+        print("Failed to reach the server.")
+        print("Reason:",e.reason)
+        sys.exit()
+    else:   
+        tree = ET.parse(response)
+        root = tree.getroot()
+        return root
 
 def extract_data(root,REGIONS):
     last_issue = root[0][3].text
