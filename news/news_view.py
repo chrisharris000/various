@@ -7,7 +7,6 @@ import news_format
 def create_window():
     window = Tk()
     window.title('News Feed')
-    window.geometry('1000x500')
     return window
 
 def create_notebook(window):
@@ -30,22 +29,25 @@ def add_tabs(nb, titles):
     return tabs
 
 def create_label(tab, row, column, text):
-    lbl = Label(tab, text = text, wraplength = 750, justify = LEFT)
+    lbl = Label(tab, text = text, wraplength = 1000, justify = CENTER)
     lbl.grid(row = row, column = column)
+    return lbl
 
-def create_button(tab, row, column, text, command):
-    btn = Button(tab, text = text, command = command)
+def create_button(tab, row, column, text):
+    btn = Button(tab, text = text)
     btn.grid(row = row, column = column)
+    return btn
 
-def open_link():
-    webbrowser.open(link)
+def callback(event):
+    webbrowser.open_new(event.widget.cget("text"))
 
 news_stories = news_format.information()
 
 window = create_window()
 weight_cells(window)
 nb = create_notebook(window)
-tabs = add_tabs(nb, news_stories.keys())
+tabs = add_tabs(nb, list(news_stories.keys()) + ["Links"])
+links = []
 
 for index, cat in enumerate(news_stories):
     tab = tabs[index]
@@ -56,11 +58,24 @@ for index, cat in enumerate(news_stories):
             title = article['title']
             article_summary = article['article_summary']
             link = article['link']
-            create_label(tab, r, c, title)
-            create_label(tab, r + 1, c, article_summary)
+            links.append(link)
+            
+            lbl = create_label(tab, r, c, title)
+            lbl.config(font=(None, 14, 'bold'))
+            
+            create_label(tab, r + 1, c, article_summary + '\n\n')
+            
             r += 2
 
-nb.grid(row=1, column=0, columnspan=500, rowspan=500, sticky='NESW')    
+r, c = 0, 0
 
+for link in links:
+    lbl = Label(tabs[-1], text = link, fg = "blue", cursor="hand2", wraplength = 1000, justify = LEFT)
+    lbl.grid(row = r, column = c)
+    lbl.bind("<Button-1>", callback)
+    lbl.config(font=(None, 8))
+    r += 1
+
+nb.grid(row=1, column=0, columnspan=750, rowspan=750, sticky='NESW')    
 
 window.mainloop()
