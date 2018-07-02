@@ -28,3 +28,5 @@ def information(urls = URLS, categories = CATEGORIES):
         news_summary = extract_data(url)
         info[category] = news_summary
     return info
+
+#test
