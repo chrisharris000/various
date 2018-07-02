@@ -18,7 +18,7 @@ def extract_data(url):
         article_summary = e["summary"]
         link = e["links"][0]["href"]
         news_summary.append({'title':title,
-                             'atricle_summary':article_summary,
+                             'article_summary':article_summary,
                              'link':link})
     return news_summary
 
@@ -28,5 +28,3 @@ def information(urls = URLS, categories = CATEGORIES):
         news_summary = extract_data(url)
         info[category] = news_summary
     return info
-
-#test
