@@ -1,12 +1,13 @@
 #!/usr/bin/python
 from tkinter import *
 from tkinter import ttk
+import webbrowser
 import news_format
  
 def create_window():
     window = Tk()
     window.title('News Feed')
-    window.geometry('500x500')
+    window.geometry('1000x500')
     return window
 
 def create_notebook(window):
@@ -15,7 +16,7 @@ def create_notebook(window):
 
 def weight_cells(window):
     rows = 0
-    while rows < 50:
+    while rows < 100:
         window.rowconfigure(rows, weight=1)
         window.columnconfigure(rows, weight=1)
         rows += 1
@@ -29,7 +30,7 @@ def add_tabs(nb, titles):
     return tabs
 
 def create_label(tab, row, column, text):
-    lbl = Label(tab, text = text)
+    lbl = Label(tab, text = text, wraplength = 750, justify = LEFT)
     lbl.grid(row = row, column = column)
 
 def create_button(tab, row, column, text, command):
@@ -37,7 +38,7 @@ def create_button(tab, row, column, text, command):
     btn.grid(row = row, column = column)
 
 def open_link():
-    pass
+    webbrowser.open(link)
 
 news_stories = news_format.information()
 
@@ -51,26 +52,15 @@ for index, cat in enumerate(news_stories):
     stories = news_stories[cat]
     r, c = 0, 0
     for article in stories:
-        title = article['title']
-        article_summary = article['article_summary']
-        link = article['link']
-        if len(article_summary) < 50:
-            create_label(tab, r, c, text = title)
-            create_label(tab, r + 1, c, text = article_summary)
-            create_label(tab, r + 2, c, text = link)
-            r += 3
+        if stories.index(article) <= 5:
+            title = article['title']
+            article_summary = article['article_summary']
+            link = article['link']
+            create_label(tab, r, c, title)
+            create_label(tab, r + 1, c, article_summary)
+            r += 2
 
-nb.grid(row=1, column=0, columnspan=50, rowspan=49, sticky='NESW')    
-'''example
-#cteate widgets
-mybutton = Button(tabs[0], text='MyButton')
-lbl = Label(tabs[1],text="Hello")
-lbl2 = Label(tabs[1],text = "World")
+nb.grid(row=1, column=0, columnspan=500, rowspan=500, sticky='NESW')    
 
-#place widgets on tabs
-nb.grid(row=1, column=0, columnspan=50, rowspan=49, sticky='NESW')
-mybutton.grid(row=1,column=1)
-lbl.grid(row = 3, column = 3)
-lbl2.grid(row = 3, column = 10)'''
 
 window.mainloop()

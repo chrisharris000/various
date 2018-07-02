@@ -14,8 +14,8 @@ def extract_data(url):
     data = feedparser.parse(url)
     entries = data['entries']
     for e in entries:
-        title = e["title"]
-        article_summary = e["summary"]
+        title = e["title"].replace("&quot;","\"")
+        article_summary = e["summary"].replace("&quot;","\"")
         link = e["links"][0]["href"]
         news_summary.append({'title':title,
                              'article_summary':article_summary,
