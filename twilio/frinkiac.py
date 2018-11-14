@@ -3,6 +3,9 @@ import requests
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
 
+'''
+Adapted from https://www.pluralsight.com/guides/build-a-simpsons-quote-bot-with-twilio-mms-frinkiac-and-python
+'''
 account_sid = ''
 auth_token  = ''
 
