@@ -16,6 +16,7 @@ def get_quote():
 
         # Combine each line of subtitles into one string.
         caption = "\n".join([subtitle["Content"] for subtitle in json["Subtitles"]])
+        caption += "\n" + json['Episode']['Key'] +  ' - ' + json['Episode']['Title']
         return caption
 
 def send_MMS():
